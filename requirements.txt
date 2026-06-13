@@ -2,3 +2,4 @@ python-escpos
 pyusb
 pyserial
 pywin32
+pyinstaller

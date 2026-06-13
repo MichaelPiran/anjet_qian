@@ -1,0 +1,34 @@
+{
+  "receipt_title": "Festa di Paese - Punto Ristoro",
+  "address": "Via Roma 12, 20100 Milano",
+  "order_id": "GUI-00004",
+  "timestamp": "13/06/2026 11:53:40",
+  "show_time": true,
+  "time_label": "Ora",
+  "items": [
+    {
+      "name": "Tramezzino",
+      "qty": 5,
+      "price": 3.8,
+      "description": ""
+    },
+    {
+      "name": "Torta del Giorno",
+      "qty": 2,
+      "price": 4.2,
+      "description": ""
+    }
+  ],
+  "discount": 0,
+  "tax": 0,
+  "show_subtotal": false,
+  "show_unit_price": false,
+  "subtotal_label": "Subtotale",
+  "total_label": "Totale",
+  "unit_price_label": "Prezzo",
+  "currency_symbol": "",
+  "show_currency": false,
+  "highlight_phrase": "Sapori buoni, compagnia migliore.",
+  "notes": [],
+  "footer": "Grazie per aver festeggiato con noi"
+}

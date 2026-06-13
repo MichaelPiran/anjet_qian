@@ -1,0 +1,34 @@
+{
+  "receipt_title": "Festa di Paese - Punto Ristoro",
+  "address": "Via Roma 12, 20100 Milano",
+  "order_id": "GUI-00003",
+  "timestamp": "13/06/2026 11:24:28",
+  "show_time": true,
+  "time_label": "Ora",
+  "items": [
+    {
+      "name": "Acqua Frizzante",
+      "qty": 4,
+      "price": 1.0,
+      "description": ""
+    },
+    {
+      "name": "Spritz",
+      "qty": 2,
+      "price": 5.0,
+      "description": ""
+    }
+  ],
+  "discount": 0,
+  "tax": 0,
+  "show_subtotal": false,
+  "show_unit_price": false,
+  "subtotal_label": "Subtotale",
+  "total_label": "Totale",
+  "unit_price_label": "Prezzo",
+  "currency_symbol": "",
+  "show_currency": false,
+  "highlight_phrase": "Una festa cosi si ricorda.",
+  "notes": [],
+  "footer": "Grazie per aver festeggiato con noi"
+}

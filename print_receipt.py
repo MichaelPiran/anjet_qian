@@ -7,13 +7,6 @@ from decimal import Decimal, ROUND_HALF_UP
 from pathlib import Path
 from typing import Any
 
-try:
-    from escpos.printer import Network, Serial, Usb  # type: ignore[import-not-found]
-except ImportError as exc:  # pragma: no cover - handled before runtime use
-    raise SystemExit(
-        "Manca la dipendenza 'python-escpos'. Installa con: pip install python-escpos pyusb pyserial pywin32"
-    ) from exc
-
 
 TWOPLACES = Decimal("0.01")
 
@@ -78,8 +71,9 @@ def decimalize(value: Any) -> Decimal:
     return Decimal(str(value)).quantize(TWOPLACES, rounding=ROUND_HALF_UP)
 
 
-def format_money(value: Decimal) -> str:
-    return f"EUR {value:.2f}"
+def format_price(value: Decimal, currency_symbol: str = "EUR ", show_currency: bool = True) -> str:
+    amount = f"{value:.2f}"
+    return f"{currency_symbol}{amount}" if show_currency else amount
 
 
 def build_printer(args: argparse.Namespace):
@@ -87,6 +81,12 @@ def build_printer(args: argparse.Namespace):
         raise SystemExit("Specifica --connection oppure usa --list-printers.")
 
     if args.connection == "usb":
+        try:
+            from escpos.printer import Usb  # type: ignore[import-not-found]
+        except ImportError as exc:
+            raise SystemExit(
+                "Manca la dipendenza 'python-escpos'. Installa con: pip install python-escpos pyusb pyserial pywin32"
+            ) from exc
         if args.vendor_id is None or args.product_id is None:
             raise SystemExit("Per la connessione USB servono --vendor-id e --product-id.")
         try:
@@ -105,6 +105,12 @@ def build_printer(args: argparse.Namespace):
             ) from exc
 
     if args.connection == "serial":
+        try:
+            from escpos.printer import Serial  # type: ignore[import-not-found]
+        except ImportError as exc:
+            raise SystemExit(
+                "Manca la dipendenza 'python-escpos'. Installa con: pip install python-escpos pyusb pyserial pywin32"
+            ) from exc
         if not args.port:
             raise SystemExit("Per la connessione seriale serve --port, ad esempio COM3.")
         return Serial(
@@ -118,6 +124,12 @@ def build_printer(args: argparse.Namespace):
         )
 
     if args.connection == "network":
+        try:
+            from escpos.printer import Network  # type: ignore[import-not-found]
+        except ImportError as exc:
+            raise SystemExit(
+                "Manca la dipendenza 'python-escpos'. Installa con: pip install python-escpos pyusb pyserial pywin32"
+            ) from exc
         if not args.host:
             raise SystemExit("Per la connessione network serve --host.")
         return Network(args.host, port=args.printer_port, timeout=10)
@@ -158,12 +170,22 @@ def print_line(printer: Any, left: str, right: str, width: int = 42) -> None:
 
 
 def print_receipt(printer: Any, receipt: dict[str, Any], no_cut: bool) -> None:
-    store_name = receipt.get("store_name", "ANJET80 ULTRA")
+    store_name = receipt.get("receipt_title") or receipt.get("store_name", "ANJET80 ULTRA")
     address = receipt.get("address", "")
     footer = receipt.get("footer", "Grazie e arrivederci")
     notes = receipt.get("notes", [])
     order_id = receipt.get("order_id", "")
     timestamp = receipt.get("timestamp") or datetime.now().strftime("%d/%m/%Y %H:%M")
+    show_time = receipt.get("show_time", True)
+    time_label = receipt.get("time_label", "Ora")
+    subtotal_label = receipt.get("subtotal_label", "Subtotale")
+    total_label = receipt.get("total_label", "Totale")
+    unit_price_label = receipt.get("unit_price_label", "Prezzo")
+    currency_symbol = receipt.get("currency_symbol", "EUR ")
+    show_currency = receipt.get("show_currency", True)
+    show_unit_price = receipt.get("show_unit_price", True)
+    show_subtotal = receipt.get("show_subtotal", True)
+    highlight_phrase = receipt.get("highlight_phrase", "")
 
     printer.set(align="center", bold=True, width=2, height=2)
     printer.text(f"{store_name}\n")
@@ -175,7 +197,8 @@ def print_receipt(printer: Any, receipt: dict[str, Any], no_cut: bool) -> None:
     printer.set(align="left")
     if order_id:
         printer.text(f"Ordine: {order_id}\n")
-    printer.text(f"Data:   {timestamp}\n")
+    if show_time:
+        printer.text(f"{time_label}:   {timestamp}\n")
     printer.text("------------------------------------------\n")
 
     subtotal = Decimal("0.00")
@@ -185,24 +208,34 @@ def print_receipt(printer: Any, receipt: dict[str, Any], no_cut: bool) -> None:
         price = decimalize(item["price"])
         total = item_total(item)
         subtotal += total
-        print_line(printer, f"{qty} x {name}", format_money(total))
+        print_line(printer, f"{qty} x {name}", format_price(total, currency_symbol, show_currency))
         if item.get("description"):
             printer.text(f"  {item['description']}\n")
-        printer.text(f"  Prezzo unitario: {format_money(price)}\n")
+        if show_unit_price:
+            printer.text(
+                f"  {unit_price_label}: {format_price(price, currency_symbol, show_currency)}\n"
+            )
 
     discount = decimalize(receipt.get("discount", 0))
     tax = decimalize(receipt.get("tax", 0))
     total_due = (subtotal - discount + tax).quantize(TWOPLACES, rounding=ROUND_HALF_UP)
 
     printer.text("------------------------------------------\n")
-    print_line(printer, "Subtotale", format_money(subtotal))
+    if show_subtotal:
+        print_line(printer, subtotal_label, format_price(subtotal, currency_symbol, show_currency))
     if discount > 0:
-        print_line(printer, "Sconto", f"- {format_money(discount)}")
+        print_line(printer, "Sconto", f"- {format_price(discount, currency_symbol, show_currency)}")
     if tax > 0:
-        print_line(printer, "Tasse", format_money(tax))
+        print_line(printer, "Tasse", format_price(tax, currency_symbol, show_currency))
     printer.set(bold=True)
-    print_line(printer, "TOTALE", format_money(total_due))
+    print_line(printer, total_label.upper(), format_price(total_due, currency_symbol, show_currency))
     printer.set(bold=False)
+
+    if highlight_phrase:
+        printer.text("------------------------------------------\n")
+        printer.set(align="center", bold=True)
+        printer.text(f"{highlight_phrase}\n")
+        printer.set(align="left", bold=False)
 
     if notes:
         printer.text("------------------------------------------\n")

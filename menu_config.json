@@ -1,0 +1,90 @@
+{
+  "store_name": "Bar Centrale",
+  "address": "Via Roma 12, 20100 Milano",
+  "price_display": {
+    "currency_symbol": "",
+    "show_currency": false
+  },
+  "receipt": {
+    "title": "Festa di Paese - Punto Ristoro",
+    "show_time": true,
+    "time_label": "Ora",
+    "show_subtotal": false,
+    "show_unit_price": false,
+    "subtotal_label": "Subtotale",
+    "total_label": "Totale",
+    "unit_price_label": "Prezzo",
+    "footer": "Grazie per aver festeggiato con noi",
+    "notes": [],
+    "effect_phrases": [
+      "Che la festa continui!",
+      "Un brindisi al paese!",
+      "Sapori buoni, compagnia migliore.",
+      "Qui si mangia e si sorride.",
+      "Una festa cosi si ricorda.",
+      "Buon appetito e buona musica!"
+    ]
+  },
+  "printer": {
+    "enabled": true,
+    "connection": "windows",
+    "printer_name": "POS-80-Series-ok",
+    "no_cut": false,
+    "printer_port": 9100
+  },
+  "menu": {
+    "bibite": [
+      {
+        "name": "Acqua Naturale",
+        "price": 1.0
+      },
+      {
+        "name": "Acqua Frizzante",
+        "price": 1.0
+      },
+      {
+        "name": "Cola",
+        "price": 2.5
+      },
+      {
+        "name": "Aranciata",
+        "price": 2.5
+      },
+      {
+        "name": "Birra Piccola",
+        "price": 3.5
+      },
+      {
+        "name": "Spritz",
+        "price": 5.0
+      }
+    ],
+    "cibo": [
+      {
+        "name": "Toast",
+        "price": 4.5
+      },
+      {
+        "name": "Panino Prosciutto",
+        "price": 5.5
+      },
+      {
+        "name": "Tramezzino",
+        "price": 3.8
+      },
+      {
+        "name": "Patatine",
+        "price": 2.8
+      },
+      {
+        "name": "Cornetto",
+        "price": 1.8,
+        "description": "Crema"
+      },
+      {
+        "name": "Torta del Giorno",
+        "price": 4.2
+      }
+    ]
+  }
+}

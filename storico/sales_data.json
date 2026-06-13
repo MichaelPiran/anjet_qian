@@ -1,0 +1,128 @@
+{
+  "last_sale_id": 4,
+  "sales": [
+    {
+      "sale_id": 1,
+      "timestamp": "13/06/2026 11:19:19",
+      "items": [
+        {
+          "name": "Acqua Naturale",
+          "qty": 1,
+          "price": 1.0,
+          "description": ""
+        },
+        {
+          "name": "Cola",
+          "qty": 1,
+          "price": 2.5,
+          "description": ""
+        },
+        {
+          "name": "Toast",
+          "qty": 1,
+          "price": 4.5,
+          "description": ""
+        },
+        {
+          "name": "Panino Prosciutto",
+          "qty": 1,
+          "price": 5.5,
+          "description": ""
+        },
+        {
+          "name": "Patatine",
+          "qty": 1,
+          "price": 2.8,
+          "description": ""
+        }
+      ],
+      "total": 16.3
+    },
+    {
+      "sale_id": 2,
+      "timestamp": "13/06/2026 11:19:59",
+      "items": [
+        {
+          "name": "Toast",
+          "qty": 1,
+          "price": 4.5,
+          "description": ""
+        },
+        {
+          "name": "Tramezzino",
+          "qty": 1,
+          "price": 3.8,
+          "description": ""
+        },
+        {
+          "name": "Torta del Giorno",
+          "qty": 1,
+          "price": 4.2,
+          "description": ""
+        },
+        {
+          "name": "Panino Prosciutto",
+          "qty": 2,
+          "price": 5.5,
+          "description": ""
+        },
+        {
+          "name": "Patatine",
+          "qty": 1,
+          "price": 2.8,
+          "description": ""
+        }
+      ],
+      "total": 26.3
+    },
+    {
+      "sale_id": 3,
+      "timestamp": "13/06/2026 11:24:28",
+      "items": [
+        {
+          "name": "Acqua Frizzante",
+          "qty": 4,
+          "price": 1.0,
+          "description": ""
+        },
+        {
+          "name": "Spritz",
+          "qty": 2,
+          "price": 5.0,
+          "description": ""
+        }
+      ],
+      "total": 14.0
+    },
+    {
+      "sale_id": 4,
+      "timestamp": "13/06/2026 11:53:40",
+      "items": [
+        {
+          "name": "Tramezzino",
+          "qty": 5,
+          "price": 3.8,
+          "description": ""
+        },
+        {
+          "name": "Torta del Giorno",
+          "qty": 2,
+          "price": 4.2,
+          "description": ""
+        }
+      ],
+      "total": 27.4
+    }
+  ],
+  "item_counters": {
+    "Acqua Naturale": 1,
+    "Cola": 1,
+    "Toast": 2,
+    "Panino Prosciutto": 3,
+    "Patatine": 2,
+    "Tramezzino": 6,
+    "Torta del Giorno": 3,
+    "Acqua Frizzante": 4,
+    "Spritz": 2
+  }
+}

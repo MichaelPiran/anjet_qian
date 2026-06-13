@@ -2,6 +2,128 @@
 
 Questo esempio usa il linguaggio ESC/POS, tipico delle stampanti termiche da 80 mm.
 
+## Applicazione grafica con storage su file
+
+Il progetto include anche una GUI locale per registrare vendite da banco.
+
+- Il menu di bibite e cibo viene letto da `menu_config.json`.
+- Ogni vendita viene salvata in `storico/sales_data.json`.
+- Ogni movimento applicativo viene scritto in `logs/movements.log` con rotazione automatica.
+- Per ogni vendita viene generato anche un file JSON in `storico/receipts/`, riusabile con `print_receipt.py`.
+- Il contatore articoli venduti viene mantenuto in `storico/sales_data.json` e mostrato nella GUI.
+- La GUI mostra anche uno storico filtrabile per data con incasso giornaliero.
+- La stampa diretta parte dal pulsante di conferma se la sezione `printer` nel file di config e attivata.
+- I prezzi sono mostrati come numeri semplici, senza simbolo euro, perche non si tratta di uno scontrino fiscale.
+- La cartella `storico/` viene creata automaticamente se non esiste; se trova un vecchio `sales_data.json` in root, lo migra al primo avvio.
+
+### Avvio GUI
+
+```powershell
+py .\gui_app.py
+```
+
+Se `py` non e disponibile nel tuo ambiente, usa il comando Python che hai installato, ad esempio:
+
+```powershell
+python .\gui_app.py
+```
+
+### Configurazione menu
+
+Modifica `menu_config.json` per cambiare articoli, prezzi, formato dello scontrino e parametri stampante. Struttura di esempio:
+
+```json
+{
+	"store_name": "Bar Centrale",
+	"address": "Via Roma 12, 20100 Milano",
+	"price_display": {
+		"currency_symbol": "",
+		"show_currency": false
+	},
+	"receipt": {
+		"title": "Festa di Paese - Punto Ristoro",
+		"show_time": true,
+		"time_label": "Ora",
+		"show_subtotal": false,
+		"show_unit_price": false,
+		"footer": "Grazie per aver festeggiato con noi",
+		"effect_phrases": [
+			"Che la festa continui!",
+			"Un brindisi al paese!"
+		]
+	},
+	"printer": {
+		"enabled": true,
+		"connection": "windows",
+		"printer_name": "POS-80-Series-ok"
+	},
+	"menu": {
+		"bibite": [
+			{ "name": "Acqua Naturale", "price": 1.0 }
+		],
+		"cibo": [
+			{ "name": "Toast", "price": 4.5 }
+		]
+	}
+}
+```
+
+La sezione `receipt` controlla il contenuto dello scontrino non fiscale:
+
+- titolo
+- visualizzazione dell'ora
+- elenco frasi corte ad effetto, da cui l'app ne estrae una a ogni vendita
+- etichette testuali come `Totale` o `Ora`
+
+Per attivare la stampa diretta imposta `printer.enabled` a `true` e completa i parametri di collegamento della stampante.
+
+Se la stampante e collegata via USB ma installata in Windows, la configurazione corretta resta quella per nome stampante:
+
+```json
+"printer": {
+	"enabled": true,
+	"connection": "windows",
+	"printer_name": "POS-80-Series-ok",
+	"no_cut": false
+}
+```
+
+In questo scenario il cavo e USB, ma il backend usato dall'app e quello Windows spooler, esattamente come nel flusso gia usato con `print_receipt.py`.
+
+### Makefile: run, build e installer
+
+Il progetto include un `Makefile` con target pronti per ambiente Windows:
+
+```powershell
+make install
+make run
+make build
+make portable
+make installer
+```
+
+Target disponibili:
+
+- `make install`: installa le dipendenze Python.
+- `make run`: avvia la GUI.
+- `make build`: genera la versione `onedir` in `dist/AnjetQianPOS/`.
+- `make portable`: genera un eseguibile singolo in `dist/AnjetQianPOS.exe`.
+- `make installer`: genera un vero installer Windows con Inno Setup.
+- `make clean`: rimuove cartelle di build.
+
+Per `make installer` serve Inno Setup 6 installato. Il comando prova `iscc` dal `PATH` e, se non lo trova, usa il percorso standard di Inno Setup su Windows.
+
+Per personalizzare la grafica dell'installer, usa la cartella [img](img):
+
+- [img/README.txt](img/README.txt)
+- `img/wizard_left.bmp`
+- `img/wizard_top.bmp`
+- `img/setup.ico`
+
+Se i file grafici non sono presenti, l'installer usa l'aspetto standard di Inno Setup senza fallire.
+
+La GUI usa `tkinter`, che normalmente e gia inclusa in Python su Windows.
+
 ## 1. Installazione
 
 Installa Python, poi i pacchetti necessari:

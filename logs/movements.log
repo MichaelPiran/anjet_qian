@@ -1,0 +1,81 @@
+2026-06-13 11:19:07,604 | INFO | APPLICATION_STARTED
+2026-06-13 11:19:13,079 | INFO | ADD_ITEM | name=Acqua Naturale | price=1.0
+2026-06-13 11:19:14,285 | INFO | ADD_ITEM | name=Cola | price=2.5
+2026-06-13 11:19:15,650 | INFO | ADD_ITEM | name=Toast | price=4.5
+2026-06-13 11:19:16,017 | INFO | ADD_ITEM | name=Panino Prosciutto | price=5.5
+2026-06-13 11:19:16,332 | INFO | ADD_ITEM | name=Patatine | price=2.8
+2026-06-13 11:19:20,269 | INFO | PRINT_COMPLETED | order_id=GUI-00001
+2026-06-13 11:19:20,269 | INFO | SALE_COMPLETED | sale_id=1 | items=5 | total=16.30
+2026-06-13 11:19:42,302 | INFO | ADD_ITEM | name=Toast | price=4.5
+2026-06-13 11:19:42,810 | INFO | ADD_ITEM | name=Tramezzino | price=3.8
+2026-06-13 11:19:43,655 | INFO | ADD_ITEM | name=Torta del Giorno | price=4.2
+2026-06-13 11:19:44,906 | INFO | ADD_ITEM | name=Panino Prosciutto | price=5.5
+2026-06-13 11:19:45,209 | INFO | ADD_ITEM | name=Patatine | price=2.8
+2026-06-13 11:19:48,331 | INFO | ADD_ITEM | name=Panino Prosciutto | price=5.5
+2026-06-13 11:19:49,082 | INFO | ADD_ITEM | name=Panino Prosciutto | price=5.5
+2026-06-13 11:19:52,080 | INFO | REMOVE_ITEM | name=Panino Prosciutto
+2026-06-13 11:19:59,389 | INFO | PRINT_COMPLETED | order_id=GUI-00002
+2026-06-13 11:19:59,389 | INFO | SALE_COMPLETED | sale_id=2 | items=5 | total=26.30
+2026-06-13 11:23:47,540 | INFO | APPLICATION_STARTED
+2026-06-13 11:24:01,347 | INFO | ADD_ITEM | name=Acqua Naturale | price=1.0
+2026-06-13 11:24:04,449 | INFO | CLEAR_ORDER
+2026-06-13 11:24:05,235 | INFO | ADD_ITEM | name=Acqua Frizzante | price=1.0
+2026-06-13 11:24:09,191 | INFO | INCREASE_ITEM | name=Acqua Frizzante
+2026-06-13 11:24:11,880 | INFO | INCREASE_ITEM | name=Acqua Frizzante
+2026-06-13 11:24:14,703 | INFO | INCREASE_ITEM | name=Acqua Frizzante
+2026-06-13 11:24:20,011 | INFO | ADD_ITEM | name=Spritz | price=5.0
+2026-06-13 11:24:24,195 | INFO | INCREASE_ITEM | name=Spritz
+2026-06-13 11:24:28,758 | INFO | PRINT_COMPLETED | order_id=GUI-00003
+2026-06-13 11:24:28,758 | INFO | SALE_COMPLETED | sale_id=3 | items=2 | total=14.00
+2026-06-13 11:26:48,716 | INFO | APPLICATION_STARTED
+2026-06-13 11:26:52,384 | INFO | ADD_ITEM | name=Cola | price=2.5
+2026-06-13 11:26:58,197 | INFO | ADD_ITEM | name=Cola | price=2.5
+2026-06-13 11:26:58,829 | INFO | ADD_ITEM | name=Cola | price=2.5
+2026-06-13 11:27:01,657 | INFO | REMOVE_ITEM | name=Cola
+2026-06-13 11:27:04,021 | INFO | REMOVE_ITEM | name=Cola
+2026-06-13 11:27:06,452 | INFO | ADD_ITEM | name=Cola | price=2.5
+2026-06-13 11:27:06,993 | INFO | ADD_ITEM | name=Cola | price=2.5
+2026-06-13 11:27:07,327 | INFO | ADD_ITEM | name=Cola | price=2.5
+2026-06-13 11:27:07,947 | INFO | ADD_ITEM | name=Cola | price=2.5
+2026-06-13 11:27:08,154 | INFO | ADD_ITEM | name=Cola | price=2.5
+2026-06-13 11:27:08,313 | INFO | ADD_ITEM | name=Cola | price=2.5
+2026-06-13 11:27:08,441 | INFO | ADD_ITEM | name=Cola | price=2.5
+2026-06-13 11:27:09,034 | INFO | ADD_ITEM | name=Spritz | price=5.0
+2026-06-13 11:27:09,194 | INFO | ADD_ITEM | name=Spritz | price=5.0
+2026-06-13 11:27:09,376 | INFO | ADD_ITEM | name=Spritz | price=5.0
+2026-06-13 11:27:09,498 | INFO | ADD_ITEM | name=Spritz | price=5.0
+2026-06-13 11:27:09,645 | INFO | ADD_ITEM | name=Spritz | price=5.0
+2026-06-13 11:27:09,773 | INFO | ADD_ITEM | name=Spritz | price=5.0
+2026-06-13 11:27:09,929 | INFO | ADD_ITEM | name=Spritz | price=5.0
+2026-06-13 11:27:10,552 | INFO | ADD_ITEM | name=Tramezzino | price=3.8
+2026-06-13 11:27:10,716 | INFO | ADD_ITEM | name=Tramezzino | price=3.8
+2026-06-13 11:27:10,884 | INFO | ADD_ITEM | name=Tramezzino | price=3.8
+2026-06-13 11:27:11,054 | INFO | ADD_ITEM | name=Tramezzino | price=3.8
+2026-06-13 11:27:11,198 | INFO | ADD_ITEM | name=Tramezzino | price=3.8
+2026-06-13 11:27:11,318 | INFO | ADD_ITEM | name=Tramezzino | price=3.8
+2026-06-13 11:27:11,486 | INFO | ADD_ITEM | name=Tramezzino | price=3.8
+2026-06-13 11:27:14,282 | INFO | CLEAR_ORDER
+2026-06-13 11:27:15,251 | INFO | ADD_ITEM | name=Cola | price=2.5
+2026-06-13 11:27:15,412 | INFO | ADD_ITEM | name=Cola | price=2.5
+2026-06-13 11:27:28,309 | INFO | ADD_ITEM | name=Torta del Giorno | price=4.2
+2026-06-13 11:27:28,666 | INFO | ADD_ITEM | name=Cornetto | price=1.8
+2026-06-13 11:27:28,996 | INFO | ADD_ITEM | name=Panino Prosciutto | price=5.5
+2026-06-13 11:27:29,471 | INFO | ADD_ITEM | name=Toast | price=4.5
+2026-06-13 11:52:35,350 | INFO | APPLICATION_STARTED
+2026-06-13 11:53:31,985 | INFO | ADD_ITEM | name=Toast | price=4.5
+2026-06-13 11:53:32,417 | INFO | ADD_ITEM | name=Panino Prosciutto | price=5.5
+2026-06-13 11:53:32,819 | INFO | ADD_ITEM | name=Tramezzino | price=3.8
+2026-06-13 11:53:33,547 | INFO | ADD_ITEM | name=Spritz | price=5.0
+2026-06-13 11:53:34,610 | INFO | ADD_ITEM | name=Spritz | price=5.0
+2026-06-13 11:53:34,786 | INFO | ADD_ITEM | name=Spritz | price=5.0
+2026-06-13 11:53:37,493 | INFO | DELETE_ITEM | name=Tramezzino
+2026-06-13 11:53:38,403 | INFO | CLEAR_ORDER
+2026-06-13 11:53:38,995 | INFO | ADD_ITEM | name=Tramezzino | price=3.8
+2026-06-13 11:53:39,169 | INFO | ADD_ITEM | name=Tramezzino | price=3.8
+2026-06-13 11:53:39,299 | INFO | ADD_ITEM | name=Tramezzino | price=3.8
+2026-06-13 11:53:39,443 | INFO | ADD_ITEM | name=Tramezzino | price=3.8
+2026-06-13 11:53:39,586 | INFO | ADD_ITEM | name=Tramezzino | price=3.8
+2026-06-13 11:53:40,083 | INFO | ADD_ITEM | name=Torta del Giorno | price=4.2
+2026-06-13 11:53:40,261 | INFO | ADD_ITEM | name=Torta del Giorno | price=4.2
+2026-06-13 11:53:41,134 | INFO | PRINT_COMPLETED | order_id=GUI-00004
+2026-06-13 11:53:41,134 | INFO | SALE_COMPLETED | sale_id=4 | items=2 | total=27.40
