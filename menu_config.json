@@ -1,12 +1,10 @@
 {
-  "store_name": "Bar Centrale",
-  "address": "Via Roma 12, 20100 Milano",
   "price_display": {
     "currency_symbol": "",
     "show_currency": false
   },
   "receipt": {
-    "title": "Festa di Paese - Punto Ristoro",
+    "title": "Amici del Borgo San Benedetto",
     "show_time": true,
     "time_label": "Ora",
     "show_subtotal": false,
@@ -14,13 +12,10 @@
     "subtotal_label": "Subtotale",
     "total_label": "Totale",
     "unit_price_label": "Prezzo",
-    "footer": "Grazie per aver festeggiato con noi",
     "notes": [],
     "effect_phrases": [
-      "Che la festa continui!",
-      "Un brindisi al paese!",
+      "Beive, mangè, poca vöia 'd travaijè!",
       "Sapori buoni, compagnia migliore.",
-      "Qui si mangia e si sorride.",
       "Una festa cosi si ricorda.",
       "Buon appetito e buona musica!"
     ]
@@ -35,55 +30,51 @@
   "menu": {
     "bibite": [
       {
-        "name": "Acqua Naturale",
-        "price": 1.0
+        "name": "Acqua",
+        "price": 1.0,
+        "color": "#061ed1"
       },
       {
-        "name": "Acqua Frizzante",
-        "price": 1.0
+        "name": "CocaCola",
+        "price": 3.5,
+        "color": "#c2020f"
       },
       {
-        "name": "Cola",
-        "price": 2.5
-      },
-      {
-        "name": "Aranciata",
-        "price": 2.5
-      },
-      {
-        "name": "Birra Piccola",
-        "price": 3.5
+        "name": "Birra",
+        "price": 5,
+        "color": "#f0d50a"
       },
       {
         "name": "Spritz",
-        "price": 5.0
+        "price": 5.0,
+        "color": "#05ad27"
+      },
+      {
+        "name": "Vino bianco",
+        "price": 5.0,
+        "color": "#05ad27"
       }
     ],
     "cibo": [
       {
-        "name": "Toast",
-        "price": 4.5
+        "name": "Pizza Margherita",
+        "price": 6,
+        "color": "#05ad27"
       },
       {
-        "name": "Panino Prosciutto",
-        "price": 5.5
+        "name": "Pizza Prosciutto",
+        "price": 7,
+        "color": "#05ad27"
       },
       {
-        "name": "Tramezzino",
-        "price": 3.8
+        "name": "Pizza Wurstel",
+        "price": 7,
+        "color": "#05ad27"
       },
       {
-        "name": "Patatine",
-        "price": 2.8
-      },
-      {
-        "name": "Cornetto",
-        "price": 1.8,
-        "description": "Crema"
-      },
-      {
-        "name": "Torta del Giorno",
-        "price": 4.2
+        "name": "Pizza Acciughe",
+        "price": 7,
+        "color": "#05ad27"
       }
     ]
   }

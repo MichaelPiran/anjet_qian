@@ -5,6 +5,7 @@ import json
 import logging
 import random
 import sys
+import traceback
 from collections import Counter
 from datetime import datetime
 from decimal import Decimal, ROUND_HALF_UP
@@ -19,6 +20,10 @@ from print_receipt import build_printer, print_receipt
 
 
 TWOPLACES = Decimal("0.01")
+DEFAULT_CATEGORY_COLORS = {
+    "bibite": "#0ea5e9",
+    "cibo": "#facc15",
+}
 if getattr(sys, "frozen", False):
     BASE_DIR = Path(sys.executable).resolve().parent
     BUNDLE_DIR = Path(getattr(sys, "_MEIPASS", BASE_DIR))
@@ -35,6 +40,21 @@ LOG_DIR = BASE_DIR / "logs"
 RECEIPTS_DIR = HISTORY_DIR / "receipts"
 
 
+def resolve_button_color(raw_color: Any, fallback: str) -> str:
+    color = str(raw_color or "").strip()
+    if len(color) == 7 and color.startswith("#"):
+        return color
+    return fallback
+
+
+def pick_text_color(background: str) -> str:
+    red = int(background[1:3], 16)
+    green = int(background[3:5], 16)
+    blue = int(background[5:7], 16)
+    luminance = (0.299 * red) + (0.587 * green) + (0.114 * blue)
+    return "#1f2937" if luminance >= 186 else "#ffffff"
+
+
 def decimalize(value: Any) -> Decimal:
     return Decimal(str(value)).quantize(TWOPLACES, rounding=ROUND_HALF_UP)
 
@@ -45,13 +65,17 @@ def format_price(value: Decimal, currency_symbol: str = "EUR ", show_currency: b
 
 
 def ensure_runtime_files() -> None:
+    BASE_DIR.mkdir(parents=True, exist_ok=True)
+    HISTORY_DIR.mkdir(parents=True, exist_ok=True)
+    RECEIPTS_DIR.mkdir(parents=True, exist_ok=True)
+    LOG_DIR.mkdir(parents=True, exist_ok=True)
+
     if not MENU_FILE.exists() and DEFAULT_MENU_FILE.exists():
         copyfile(DEFAULT_MENU_FILE, MENU_FILE)
 
 
 def ensure_storage_file() -> None:
     ensure_runtime_files()
-    HISTORY_DIR.mkdir(exist_ok=True)
 
     if LEGACY_SALES_FILE.exists() and not SALES_FILE.exists():
         SALES_FILE.write_text(LEGACY_SALES_FILE.read_text(encoding="utf-8"), encoding="utf-8")
@@ -73,9 +97,32 @@ def ensure_storage_file() -> None:
     )
 
 
+def report_startup_error(exc: BaseException) -> None:
+    try:
+        ensure_runtime_files()
+        timestamp = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        details = "".join(traceback.format_exception(type(exc), exc, exc.__traceback__))
+        with (LOG_DIR / "startup-error.log").open("a", encoding="utf-8") as handle:
+            handle.write(f"[{timestamp}]\n{details}\n")
+    except Exception:
+        pass
+
+    error_text = str(exc).strip() or exc.__class__.__name__
+    try:
+        temp_root = tk.Tk()
+        temp_root.withdraw()
+        messagebox.showerror(
+            "Errore avvio",
+            f"SanBenedettoPOS non e riuscito ad avviarsi.\n\n{error_text}\n\nDettagli salvati in logs\\startup-error.log",
+            parent=temp_root,
+        )
+        temp_root.destroy()
+    except Exception:
+        pass
+
+
 def configure_logging() -> logging.Logger:
-    LOG_DIR.mkdir(exist_ok=True)
-    logger = logging.getLogger("anjet_qian.gui")
+    logger = logging.getLogger("sanbenedettopos.gui")
     logger.setLevel(logging.INFO)
 
     if logger.handlers:
@@ -97,7 +144,7 @@ def configure_logging() -> logging.Logger:
 class PosApp:
     def __init__(self, root: tk.Tk) -> None:
         self.root = root
-        self.root.title("Anjet Qian POS")
+        self.root.title("SanBenedettoPOS")
         self.root.geometry("1360x820")
 
         ensure_storage_file()
@@ -132,6 +179,10 @@ class PosApp:
         config.setdefault("price_display", {"currency_symbol": "", "show_currency": False})
         config.setdefault("receipt", {})
         config.setdefault("printer", {"enabled": False})
+        for category_name, items in menu.items():
+            fallback_color = DEFAULT_CATEGORY_COLORS.get(category_name, "#2563eb")
+            for item in items:
+                item["color"] = resolve_button_color(item.get("color"), fallback_color)
         return config
 
     def load_sales_data(self) -> dict[str, Any]:
@@ -160,14 +211,10 @@ class PosApp:
         style.configure("Total.TLabel", background="#f7fafc", foreground="#17324d", font=("Segoe UI Semibold", 14))
         style.configure("Primary.TButton", font=("Segoe UI Semibold", 11), padding=(12, 14), background="#16a34a", foreground="#ffffff", borderwidth=0)
         style.configure("Secondary.TButton", font=("Segoe UI", 10), padding=(10, 10), background="#2563eb", foreground="#ffffff", borderwidth=0)
-        style.configure("Drink.TButton", font=("Segoe UI Semibold", 11), padding=(14, 18), background="#0ea5e9", foreground="#ffffff", borderwidth=0)
-        style.configure("Food.TButton", font=("Segoe UI Semibold", 11), padding=(14, 18), background="#facc15", foreground="#1f2937", borderwidth=0)
         style.configure("Treeview", rowheight=30, font=("Segoe UI", 10))
         style.configure("Treeview.Heading", font=("Segoe UI Semibold", 10))
         style.map("Primary.TButton", background=[("active", "#15803d")], foreground=[("active", "#ffffff")])
         style.map("Secondary.TButton", background=[("active", "#1d4ed8")], foreground=[("active", "#ffffff")])
-        style.map("Drink.TButton", background=[("active", "#0284c7")], foreground=[("active", "#ffffff")])
-        style.map("Food.TButton", background=[("active", "#eab308")], foreground=[("active", "#1f2937")])
 
     def format_amount(self, value: Decimal) -> str:
         return format_price(
@@ -208,8 +255,8 @@ class PosApp:
         menu_container.rowconfigure(0, weight=1)
         menu_container.rowconfigure(1, weight=1)
 
-        self.build_menu_section(menu_container, 0, "Bevande", self.menu_config["menu"].get("bibite", []), "Drink.TButton")
-        self.build_menu_section(menu_container, 1, "Cibo", self.menu_config["menu"].get("cibo", []), "Food.TButton")
+        self.build_menu_section(menu_container, 0, "Bevande", self.menu_config["menu"].get("bibite", []), DEFAULT_CATEGORY_COLORS["bibite"])
+        self.build_menu_section(menu_container, 1, "Cibo", self.menu_config["menu"].get("cibo", []), DEFAULT_CATEGORY_COLORS["cibo"])
 
         self.order_tree = ttk.Treeview(
             order_frame,
@@ -302,7 +349,7 @@ class PosApp:
         ttk.Label(history_tab, text="Incasso giorno:", font=("Segoe UI", 10, "bold")).grid(row=2, column=0, sticky="w", pady=(8, 0))
         ttk.Label(history_tab, textvariable=self.daily_total_var, font=("Segoe UI", 10, "bold")).grid(row=3, column=0, sticky="w")
 
-    def build_menu_section(self, parent: ttk.Frame, row_index: int, title: str, items: list[dict[str, Any]], button_style: str) -> None:
+    def build_menu_section(self, parent: ttk.Frame, row_index: int, title: str, items: list[dict[str, Any]], fallback_color: str) -> None:
         section = ttk.LabelFrame(parent, text=title, padding=10, style="Panel.TLabelframe")
         section.grid(row=row_index, column=0, sticky="nsew", pady=(0, 10) if row_index == 0 else (0, 0))
         section.columnconfigure(0, weight=1)
@@ -311,11 +358,36 @@ class PosApp:
         grid.grid(row=0, column=0, sticky="nsew")
         for index, item in enumerate(items):
             label = f"{item['name']}\n{self.format_amount(decimalize(item['price']))}"
-            button = ttk.Button(grid, text=label, command=lambda selected=item: self.add_item(selected), style=button_style)
+            button = ttk.Button(
+                grid,
+                text=label,
+                command=lambda selected=item: self.add_item(selected),
+                style=self.get_button_style(resolve_button_color(item.get("color"), fallback_color)),
+            )
             row = index // 3
             column = index % 3
             grid.columnconfigure(column, weight=1)
             button.grid(row=row, column=column, sticky="nsew", padx=7, pady=7)
+
+    def get_button_style(self, color: str) -> str:
+        style_name = f"Menu{color[1:].upper()}.TButton"
+        style = ttk.Style()
+        if not style.configure(style_name):
+            foreground = pick_text_color(color)
+            style.configure(
+                style_name,
+                font=("Segoe UI Semibold", 11),
+                padding=(14, 18),
+                background=color,
+                foreground=foreground,
+                borderwidth=0,
+            )
+            style.map(
+                style_name,
+                background=[("active", color)],
+                foreground=[("active", foreground)],
+            )
+        return style_name
 
     def add_item(self, item: dict[str, Any]) -> None:
         for order_item in self.current_order:
@@ -512,7 +584,6 @@ class PosApp:
         }
 
     def write_receipt_snapshot(self, sale_record: dict[str, Any], receipt_payload: dict[str, Any]) -> None:
-        RECEIPTS_DIR.mkdir(exist_ok=True)
         receipt_file = RECEIPTS_DIR / f"receipt_{sale_record['sale_id']:05d}.json"
         receipt_file.write_text(
             json.dumps(receipt_payload, indent=2, ensure_ascii=False),
@@ -568,10 +639,30 @@ class PosApp:
 
 
 def main() -> None:
-    root = tk.Tk()
-    app = PosApp(root)
-    root.minsize(1240, 760)
-    root.mainloop()
+    root: tk.Tk | None = None
+    try:
+        root = tk.Tk()
+        app = PosApp(root)
+        root.minsize(1240, 760)
+        root.mainloop()
+    except KeyboardInterrupt:
+        raise
+    except SystemExit as exc:
+        if root is not None:
+            try:
+                root.destroy()
+            except Exception:
+                pass
+        report_startup_error(exc)
+        raise
+    except Exception as exc:
+        if root is not None:
+            try:
+                root.destroy()
+            except Exception:
+                pass
+        report_startup_error(exc)
+        raise SystemExit(1) from exc
 
 
 if __name__ == "__main__":

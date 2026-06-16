@@ -1,8 +1,7 @@
-Metti qui le immagini personalizzate per l'installer.
+Metti qui l'icona personalizzata dell'applicazione e dell'installer.
 
 File supportati:
-- wizard_left.bmp  : immagine verticale sinistra del wizard Inno Setup
-- wizard_top.bmp   : immagine piccola in alto a destra del wizard
-- setup.ico        : icona dell'installer
+- icona.png        : sorgente principale dell'icona
+- icona.ico        : file generato usato da PyInstaller e Inno Setup
 
-Se questi file non sono presenti, l'installer viene creato comunque con la grafica standard.
+Esegui `make icon` per rigenerare `icona.ico` partendo da `icona.png`.

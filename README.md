@@ -14,7 +14,8 @@ Il progetto include anche una GUI locale per registrare vendite da banco.
 - La GUI mostra anche uno storico filtrabile per data con incasso giornaliero.
 - La stampa diretta parte dal pulsante di conferma se la sezione `printer` nel file di config e attivata.
 - I prezzi sono mostrati come numeri semplici, senza simbolo euro, perche non si tratta di uno scontrino fiscale.
-- La cartella `storico/` viene creata automaticamente se non esiste; se trova un vecchio `sales_data.json` in root, lo migra al primo avvio.
+- All'avvio l'app crea automaticamente `storico/`, `storico/receipts/` e `logs/` accanto all'eseguibile; se trova un vecchio `sales_data.json` in root, lo migra al primo avvio.
+- Se qualcosa va storto all'avvio, l'app mostra un messaggio leggibile e salva i dettagli in `logs/startup-error.log` invece di chiudersi senza indicazioni.
 
 ### Avvio GUI
 
@@ -59,14 +60,16 @@ Modifica `menu_config.json` per cambiare articoli, prezzi, formato dello scontri
 	},
 	"menu": {
 		"bibite": [
-			{ "name": "Acqua Naturale", "price": 1.0 }
+			{ "name": "Acqua Naturale", "price": 1.0, "color": "#0ea5e9" }
 		],
 		"cibo": [
-			{ "name": "Toast", "price": 4.5 }
+			{ "name": "Toast", "price": 4.5, "color": "#facc15" }
 		]
 	}
 }
 ```
+
+Ogni elemento dentro `menu.bibite` e `menu.cibo` deve avere anche il campo `color`, espresso come colore esadecimale `#RRGGBB`, usato per il pulsante nella schermata principale.
 
 La sezione `receipt` controlla il contenuto dello scontrino non fiscale:
 
@@ -106,21 +109,22 @@ Target disponibili:
 
 - `make install`: installa le dipendenze Python.
 - `make run`: avvia la GUI.
-- `make build`: genera la versione `onedir` in `dist/AnjetQianPOS/`.
-- `make portable`: genera un eseguibile singolo in `dist/AnjetQianPOS.exe`.
+- `make build`: genera il pacchetto portabile minimale in `dist/SanBenedettoPOS/`, con solo `SanBenedettoPOS.exe` e `menu_config.json`.
+- `make portable`: genera l'eseguibile singolo e poi prepara la stessa cartella portabile in `dist/SanBenedettoPOS/`.
 - `make installer`: genera un vero installer Windows con Inno Setup.
 - `make clean`: rimuove cartelle di build.
 
 Per `make installer` serve Inno Setup 6 installato. Il comando prova `iscc` dal `PATH` e, se non lo trova, usa il percorso standard di Inno Setup su Windows.
 
-Per personalizzare la grafica dell'installer, usa la cartella [img](img):
+Se vuoi spostare l'app su un altro PC Windows senza installare Python, ti basta copiare l'intera cartella `dist/SanBenedettoPOS/`: contiene solo l'eseguibile standalone e il file di configurazione modificabile.
+
+Per personalizzare l'icona di applicazione e installer, usa la cartella [img](img):
 
 - [img/README.txt](img/README.txt)
-- `img/wizard_left.bmp`
-- `img/wizard_top.bmp`
-- `img/setup.ico`
+- `img/icona.png`
+- `img/icona.ico`
 
-Se i file grafici non sono presenti, l'installer usa l'aspetto standard di Inno Setup senza fallire.
+Il target `make icon` genera automaticamente `img/icona.ico` a partire da `img/icona.png`, e build/installer usano quella icona.
 
 La GUI usa `tkinter`, che normalmente e gia inclusa in Python su Windows.
 

@@ -170,9 +170,7 @@ def print_line(printer: Any, left: str, right: str, width: int = 42) -> None:
 
 
 def print_receipt(printer: Any, receipt: dict[str, Any], no_cut: bool) -> None:
-    store_name = receipt.get("receipt_title") or receipt.get("store_name", "ANJET80 ULTRA")
-    address = receipt.get("address", "")
-    footer = receipt.get("footer", "Grazie e arrivederci")
+    store_name = receipt.get("receipt_title")
     notes = receipt.get("notes", [])
     order_id = receipt.get("order_id", "")
     timestamp = receipt.get("timestamp") or datetime.now().strftime("%d/%m/%Y %H:%M")
@@ -190,13 +188,10 @@ def print_receipt(printer: Any, receipt: dict[str, Any], no_cut: bool) -> None:
     printer.set(align="center", bold=True, width=2, height=2)
     printer.text(f"{store_name}\n")
     printer.set(align="center", bold=False, width=1, height=1)
-    if address:
-        printer.text(f"{address}\n")
-    printer.text("------------------------------------------\n")
+    printer.text("\n")
+    printer.text("\n")
 
     printer.set(align="left")
-    if order_id:
-        printer.text(f"Ordine: {order_id}\n")
     if show_time:
         printer.text(f"{time_label}:   {timestamp}\n")
     printer.text("------------------------------------------\n")
@@ -232,19 +227,9 @@ def print_receipt(printer: Any, receipt: dict[str, Any], no_cut: bool) -> None:
     printer.set(bold=False)
 
     if highlight_phrase:
-        printer.text("------------------------------------------\n")
         printer.set(align="center", bold=True)
         printer.text(f"{highlight_phrase}\n")
         printer.set(align="left", bold=False)
-
-    if notes:
-        printer.text("------------------------------------------\n")
-        for note in notes:
-            printer.text(f"{note}\n")
-
-    printer.text("\n")
-    printer.set(align="center")
-    printer.text(f"{footer}\n\n")
 
     if not no_cut:
         printer.cut()
