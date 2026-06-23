@@ -1,5 +1,5 @@
 {
-  "last_sale_id": 4,
+  "last_sale_id": 7,
   "sales": [
     {
       "sale_id": 1,
@@ -112,6 +112,45 @@
         }
       ],
       "total": 27.4
+    },
+    {
+      "sale_id": 5,
+      "timestamp": "23/06/2026 22:52:47",
+      "items": [
+        {
+          "name": "Vino bianco",
+          "qty": 1,
+          "price": 5.0,
+          "description": ""
+        }
+      ],
+      "total": 5.0
+    },
+    {
+      "sale_id": 6,
+      "timestamp": "23/06/2026 22:53:23",
+      "items": [
+        {
+          "name": "Pizza Wurstel",
+          "qty": 1,
+          "price": 7.0,
+          "description": ""
+        }
+      ],
+      "total": 7.0
+    },
+    {
+      "sale_id": 7,
+      "timestamp": "23/06/2026 22:55:29",
+      "items": [
+        {
+          "name": "Pizza Wurstel",
+          "qty": 1,
+          "price": 7.0,
+          "description": ""
+        }
+      ],
+      "total": 7.0
     }
   ],
   "item_counters": {
@@ -123,6 +162,8 @@
     "Tramezzino": 6,
     "Torta del Giorno": 3,
     "Acqua Frizzante": 4,
-    "Spritz": 2
+    "Spritz": 2,
+    "Vino bianco": 1,
+    "Pizza Wurstel": 2
   }
 }

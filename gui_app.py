@@ -38,6 +38,8 @@ LEGACY_SALES_FILE = BASE_DIR / "sales_data.json"
 SALES_FILE = HISTORY_DIR / "sales_data.json"
 LOG_DIR = BASE_DIR / "logs"
 RECEIPTS_DIR = HISTORY_DIR / "receipts"
+ICON_ICO_FILE = BASE_DIR / "img" / "icona.ico"
+ICON_PNG_FILE = BASE_DIR / "img" / "icona.png"
 
 
 def resolve_button_color(raw_color: Any, fallback: str) -> str:
@@ -97,6 +99,23 @@ def ensure_storage_file() -> None:
     )
 
 
+def apply_window_icon(root: tk.Tk) -> None:
+    if ICON_ICO_FILE.exists():
+        try:
+            root.iconbitmap(default=str(ICON_ICO_FILE))
+            return
+        except Exception:
+            pass
+
+    if ICON_PNG_FILE.exists():
+        try:
+            icon_image = tk.PhotoImage(file=str(ICON_PNG_FILE))
+            root.iconphoto(True, icon_image)
+            root._icon_image = icon_image  # type: ignore[attr-defined]
+        except Exception:
+            pass
+
+
 def report_startup_error(exc: BaseException) -> None:
     try:
         ensure_runtime_files()
@@ -146,6 +165,7 @@ class PosApp:
         self.root = root
         self.root.title("SanBenedettoPOS")
         self.root.geometry("1360x820")
+        apply_window_icon(self.root)
 
         ensure_storage_file()
         self.logger = configure_logging()
@@ -564,7 +584,7 @@ class PosApp:
         return {
             "receipt_title": receipt_config.get("title", self.menu_config.get("store_name", "Festa di paese")),
             "address": self.menu_config.get("address", ""),
-            "order_id": f"GUI-{sale_record['sale_id']:05d}",
+            "order_id": f"{sale_record['sale_id']:05d}",
             "timestamp": sale_record["timestamp"],
             "show_time": receipt_config.get("show_time", True),
             "time_label": receipt_config.get("time_label", "Ora"),
@@ -580,7 +600,7 @@ class PosApp:
             "show_currency": self.price_config.get("show_currency", False),
             "highlight_phrase": selected_phrase,
             "notes": receipt_config.get("notes", []),
-            "footer": receipt_config.get("footer", "Buona festa"),
+            "footer": receipt_config.get("footer", "Buona festa!"),
         }
 
     def write_receipt_snapshot(self, sale_record: dict[str, Any], receipt_payload: dict[str, Any]) -> None:

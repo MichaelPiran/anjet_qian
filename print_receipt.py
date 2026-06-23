@@ -170,7 +170,7 @@ def print_line(printer: Any, left: str, right: str, width: int = 42) -> None:
 
 
 def print_receipt(printer: Any, receipt: dict[str, Any], no_cut: bool) -> None:
-    store_name = receipt.get("receipt_title")
+    store_name = receipt.get("receipt_title") or receipt.get("store_name", "")
     notes = receipt.get("notes", [])
     order_id = receipt.get("order_id", "")
     timestamp = receipt.get("timestamp") or datetime.now().strftime("%d/%m/%Y %H:%M")
@@ -184,17 +184,27 @@ def print_receipt(printer: Any, receipt: dict[str, Any], no_cut: bool) -> None:
     show_unit_price = receipt.get("show_unit_price", True)
     show_subtotal = receipt.get("show_subtotal", True)
     highlight_phrase = receipt.get("highlight_phrase", "")
+    footer = receipt.get("footer", "")
+    item_count = len(receipt["items"])
+    extra_item_spacing = 2 if item_count <= 2 else 1 if item_count <= 4 else 0
 
-    printer.set(align="center", bold=True, width=2, height=2)
+    printer.set(align="center", bold=True, width=2, height=3)
     printer.text(f"{store_name}\n")
     printer.set(align="center", bold=False, width=1, height=1)
     printer.text("\n")
+    if order_id:
+        printer.set(align="center", bold=True, width=1, height=3)
+        printer.text(f"Scontrino {order_id}\n")
+        printer.set(align="center", bold=False, width=1, height=1)
+        printer.text("\n")
     printer.text("\n")
 
     printer.set(align="left")
     if show_time:
         printer.text(f"{time_label}:   {timestamp}\n")
+        printer.text("\n")
     printer.text("------------------------------------------\n")
+    printer.text("\n")
 
     subtotal = Decimal("0.00")
     for item in receipt["items"]:
@@ -203,33 +213,46 @@ def print_receipt(printer: Any, receipt: dict[str, Any], no_cut: bool) -> None:
         price = decimalize(item["price"])
         total = item_total(item)
         subtotal += total
+        printer.set(align="left", bold=True, width=1, height=2)
         print_line(printer, f"{qty} x {name}", format_price(total, currency_symbol, show_currency))
+        printer.set(align="left", bold=False, width=1, height=1)
         if item.get("description"):
             printer.text(f"  {item['description']}\n")
         if show_unit_price:
             printer.text(
                 f"  {unit_price_label}: {format_price(price, currency_symbol, show_currency)}\n"
             )
+        printer.text("\n" * extra_item_spacing)
 
-    discount = decimalize(receipt.get("discount", 0))
-    tax = decimalize(receipt.get("tax", 0))
-    total_due = (subtotal - discount + tax).quantize(TWOPLACES, rounding=ROUND_HALF_UP)
+    total_due = subtotal.quantize(TWOPLACES, rounding=ROUND_HALF_UP)
 
     printer.text("------------------------------------------\n")
+    printer.text("\n")
     if show_subtotal:
         print_line(printer, subtotal_label, format_price(subtotal, currency_symbol, show_currency))
-    if discount > 0:
-        print_line(printer, "Sconto", f"- {format_price(discount, currency_symbol, show_currency)}")
-    if tax > 0:
-        print_line(printer, "Tasse", format_price(tax, currency_symbol, show_currency))
-    printer.set(bold=True)
+    printer.set(bold=True, width=1, height=2)
     print_line(printer, total_label.upper(), format_price(total_due, currency_symbol, show_currency))
-    printer.set(bold=False)
+    printer.set(bold=False, width=1, height=1)
 
+    if notes:
+        printer.text("\n")
+        for note in notes:
+            printer.text(f"{note}\n")
+
+    highlight_phrase = receipt.get("highlight_phrase", "")
     if highlight_phrase:
+        printer.text("\n")
+        printer.text("\n")
         printer.set(align="center", bold=True)
         printer.text(f"{highlight_phrase}\n")
         printer.set(align="left", bold=False)
+
+    if footer:
+        printer.text("\n")
+        printer.text("\n")
+        printer.set(align="center")
+        printer.text(f"{footer}\n")
+        printer.set(align="left")
 
     if not no_cut:
         printer.cut()
