@@ -230,11 +230,13 @@ class PosApp:
         style.configure("Shortcut.TLabel", background="#eef3f7", foreground="#5b6b7a", font=("Segoe UI", 9))
         style.configure("Total.TLabel", background="#f7fafc", foreground="#17324d", font=("Segoe UI Semibold", 14))
         style.configure("Primary.TButton", font=("Segoe UI Semibold", 11), padding=(12, 14), background="#16a34a", foreground="#ffffff", borderwidth=0)
-        style.configure("Secondary.TButton", font=("Segoe UI", 10), padding=(10, 10), background="#2563eb", foreground="#ffffff", borderwidth=0)
+        style.configure("Secondary.TButton", font=("Segoe UI", 10), padding=(10, 10), background="#383636", foreground="#ffffff", borderwidth=0)
+        style.configure("Third.TButton", font=("Segoe UI", 10), padding=(10, 10), background="#c2020f", foreground="#ffffff", borderwidth=0)
         style.configure("Treeview", rowheight=30, font=("Segoe UI", 10))
         style.configure("Treeview.Heading", font=("Segoe UI Semibold", 10))
         style.map("Primary.TButton", background=[("active", "#15803d")], foreground=[("active", "#ffffff")])
-        style.map("Secondary.TButton", background=[("active", "#1d4ed8")], foreground=[("active", "#ffffff")])
+        style.map("Secondary.TButton", background=[("active", "#383636")], foreground=[("active", "#ffffff")])
+        style.map("Third.TButton", background=[("active", "#c2020f")], foreground=[("active", "#ffffff")])
 
     def format_amount(self, value: Decimal) -> str:
         return format_price(
@@ -300,7 +302,7 @@ class PosApp:
         order_controls.columnconfigure(0, weight=1)
         order_controls.columnconfigure(1, weight=1)
 
-        ttk.Button(order_controls, text="Elimina selezionato", command=self.delete_selected_item, style="Secondary.TButton").grid(
+        ttk.Button(order_controls, text="Elimina selezionato", command=self.delete_selected_item, style="Third.TButton").grid(
             row=0, column=1, sticky="ew", padx=6
         )
         ttk.Button(order_controls, text="Svuota ordine", command=self.clear_order, style="Secondary.TButton").grid(
@@ -400,7 +402,7 @@ class PosApp:
                 padding=(14, 18),
                 background=color,
                 foreground=foreground,
-                borderwidth=0,
+                borderwidth=2,
             )
             style.map(
                 style_name,

@@ -36,8 +36,13 @@
         "color": "#061ed1"
       },
       {
+        "name": "Caffè",
+        "price": 1.0,
+        "color": "#383636"
+      },
+      {
         "name": "CocaCola",
-        "price": 3.5,
+        "price": 4.0,
         "color": "#c2020f"
       },
       {
@@ -51,30 +56,40 @@
         "color": "#05ad27"
       },
       {
+        "name": "Vino bianco BOTT",
+        "price": 10.0,
+        "color": "#fafafa"
+      },
+      {
+        "name": "Vino rosso BOTT",
+        "price": 10.0,
+        "color": "#a8028f"
+      },
+      {
         "name": "Vino bianco",
-        "price": 5.0,
-        "color": "#05ad27"
+        "price": 4.0,
+        "color": "#fafafa"
       }
     ],
     "cibo": [
       {
         "name": "Pizza Margherita",
         "price": 6,
-        "color": "#05ad27"
+        "color": "#061ed1"
       },
       {
         "name": "Pizza Prosciutto",
-        "price": 7,
+        "price": 8,
         "color": "#05ad27"
       },
       {
         "name": "Pizza Wurstel",
-        "price": 7,
+        "price": 8,
         "color": "#05ad27"
       },
       {
         "name": "Pizza Acciughe",
-        "price": 7,
+        "price": 8,
         "color": "#05ad27"
       }
     ]
